@@ -7,7 +7,7 @@ using UnityEngine;
 
 namespace TofuDriverMod.Modules.Survivors
 {
-    internal class MyCharacter : SurvivorBase
+    internal class TofuDriver : SurvivorBase
     {
         internal override string bodyName { get; set; } = "TofuDriver";
 
@@ -32,15 +32,37 @@ namespace TofuDriverMod.Modules.Survivors
             healthRegen = 1.5f,
             jumpCount = 1,
             maxHealth = 110f,
+            moveSpeed = 10f,
             subtitleNameToken = TofuDriverPlugin.developerPrefix + TofuDriverPlugin.bodyPrefix + "_SUBTITLE",
             podPrefab = Resources.Load<GameObject>("Prefabs/NetworkedObjects/SurvivorPod")
         };
 
         //internal static Material henryMat = Modules.Assets.CreateMaterial("matHenry");
         internal static Material tofuDriverMat = Modules.Assets.CreateMaterial("matTofuDriver");
-        internal override int mainRendererIndex { get; set; } = 0;
+        internal static Material wheelMat = Modules.Assets.CreateMaterial("matWheel");
+        internal override int mainRendererIndex { get; set; } = 4;
 
         internal override CustomRendererInfo[] customRendererInfos { get; set; } = new CustomRendererInfo[] {
+            new CustomRendererInfo
+                {
+                    childName = "HandL",
+                    material = wheelMat
+                },
+            new CustomRendererInfo
+                {
+                    childName = "HandR",
+                    material = wheelMat
+                },
+            new CustomRendererInfo
+                {
+                    childName = "FootL",
+                    material = wheelMat
+                },
+            new CustomRendererInfo
+                {
+                    childName = "FootR",
+                    material = wheelMat
+                },
             new CustomRendererInfo
                 {
                     childName = "Model",
@@ -80,6 +102,7 @@ namespace TofuDriverMod.Modules.Survivors
 
         internal override void InitializeUnlockables()
         {
+            base.InitializeUnlockables();
             masterySkinUnlockableDef = Modules.Unlockables.AddUnlockable<Achievements.MasteryAchievement>(true);
         }
 
@@ -106,7 +129,14 @@ namespace TofuDriverMod.Modules.Survivors
             string prefix = TofuDriverPlugin.developerPrefix;
 
             #region Primary
-            Modules.Skills.AddPrimarySkill(bodyPrefab, Modules.Skills.CreatePrimarySkillDef(new EntityStates.SerializableEntityStateType(typeof(SkillStates.ShootTofu)), "Weapon", prefix + TofuDriverPlugin.bodyPrefix + "_PRIMARY_SHOOTTOFU_NAME", prefix + TofuDriverPlugin.bodyPrefix + "_PRIMARY_SHOOTTOFU_DESCRIPTION", Modules.Assets.mainAssetBundle.LoadAsset<Sprite>("texPrimaryIcon"), true));
+            SkillDef primarySkillDef = Modules.Skills.CreatePrimarySkillDef(
+                new EntityStates.SerializableEntityStateType(typeof(SkillStates.ShootTofu)),
+                States.ActivationStateName.AllowMovement,
+                prefix + TofuDriverPlugin.bodyPrefix + "_PRIMARY_SHOOTTOFU_NAME",
+                prefix + TofuDriverPlugin.bodyPrefix + "_PRIMARY_SHOOTTOFU_DESCRIPTION",
+                Modules.Assets.mainAssetBundle.LoadAsset<Sprite>("texPrimaryIcon"),
+                true);
+            Modules.Skills.AddPrimarySkill(bodyPrefab, primarySkillDef);
             #endregion
 
             #region Secondary 
@@ -118,7 +148,7 @@ namespace TofuDriverMod.Modules.Survivors
                 skillDescriptionToken = prefix + TofuDriverPlugin.bodyPrefix + "_" + driftSecondaryIdentifier + "_DESCRIPTION",
                 skillIcon = Modules.Assets.mainAssetBundle.LoadAsset<Sprite>("texSecondaryIcon"),
                 activationState = new EntityStates.SerializableEntityStateType(typeof(SkillStates.Drift)),
-                activationStateMachineName = "Drift",
+                activationStateMachineName = States.ActivationStateName.DisallowMovement,
                 baseMaxStock = 1,
                 baseRechargeInterval = 1f,
                 beginSkillCooldownOnSkillEnd = false,

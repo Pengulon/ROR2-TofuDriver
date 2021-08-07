@@ -27,7 +27,7 @@ namespace TofuDriverMod.Modules.Achievements
 
         public override BodyIndex LookUpRequiredBodyIndex()
         {
-            return BodyCatalog.FindBodyIndex(Modules.Survivors.MyCharacter.instance.fullBodyName);
+            return BodyCatalog.FindBodyIndex(Modules.Survivors.TofuDriver.instance.fullBodyName);
         }
 
         public void ClearCheck(Run run, RunReport runReport)

@@ -20,5 +20,11 @@ namespace TofuDriverMod.Modules
 
             entityStates.Add(typeof(ThrowBomb));
         }
+
+        internal static class ActivationStateName
+        {
+            public static readonly string AllowMovement = "Weapon";
+            public static readonly string DisallowMovement = "Body";
+        }
     }
 }

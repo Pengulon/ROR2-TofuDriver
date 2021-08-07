@@ -42,10 +42,10 @@ namespace TofuDriverMod.Modules.Survivors
         internal virtual void InitializeCharacter()
         {
             // this creates a config option to enable the character- feel free to remove if the character is the only thing in your mod
-            characterEnabled = Modules.Config.CharacterEnableConfig(bodyName);
+            //characterEnabled = Modules.Config.CharacterEnableConfig(bodyName);
 
-            if (characterEnabled.Value)
-            {
+           /* if (characterEnabled.Value)
+            {*/
                 InitializeUnlockables();
 
                 bodyPrefab = Modules.Prefabs.CreatePrefab(bodyName + "Body", "mdl" + bodyName, bodyInfo);
@@ -62,7 +62,7 @@ namespace TofuDriverMod.Modules.Survivors
                 InitializeSkins();
                 InitializeItemDisplays();
                 InitializeDoppelganger();
-            }
+            /*}*/
         }
 
 
